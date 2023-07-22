@@ -19,7 +19,7 @@ ALTER TABLE USER MODIFY COLUMN DocumentPath3 varchar(50) default null;
 
 
 DELIMITER ;;
-CREATE PROCEDURE add_credit (in pUserId int, in pAmount decimal(7,2), in pSupervisorId int)
+CREATE PROCEDURE addCredit (in pUserId int, in pAmount decimal(7,2), in pSupervisorId int)
 begin
 
 	 declare EXIT handler for  SQLEXCEPTION
@@ -56,7 +56,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
-CREATE PROCEDURE `add_ticket_controller`(in pPin char(6), in pFirstname varchar(45), in pLastname varchar(45) , in pJMB char(13))
+CREATE PROCEDURE `addTicketController`(in pPin char(6), in pFirstname varchar(45), in pLastname varchar(45) , in pJMB char(13))
 begin
 	if pPin not in (select Pin from PIN_USER ) then
 		insert into PIN_USER (Pin,Firstname,Lastname,JMB) values (pPin,pFirstName,pLastname,pJMB);
@@ -68,7 +68,7 @@ end ;;
 DELIMITER ;
 
 DELIMITER ;;
-CREATE  PROCEDURE `activate_ticket_controller`(in pId int)
+CREATE  PROCEDURE `activateTicketController`(in pId int)
 begin
 	if pId in (select TICKET_CONTROLLER.PIN_USER_Id from TICKET_CONTROLLER)  and 
     (select PIN_USER.isActive from PIN_USER where PIN_USER.Id = pID) = false then
@@ -78,7 +78,7 @@ end ;;
 DELIMITER ;
 
 delimiter $$
-create procedure deactivate_ticket_controller(in pId int)
+create procedure deactivateTicketController(in pId int)
 begin
 	if pId in (select TICKET_CONTROLLER.PIN_USER_Id from TICKET_CONTROLLER)  and 
     (select PIN_USER.isActive from PIN_USER where PIN_USER.Id = pID) = true then
@@ -89,7 +89,7 @@ end $$
 
 
 delimiter $$
-create procedure add_ticket_request(in pUserId int , in pTicketTypeId int, out pId int)
+create procedure addTicketRequest(in pUserId int , in pTicketTypeId int, out pId int)
 begin
 	declare EXIT handler for  SQLEXCEPTION
         BEGIN
@@ -115,7 +115,7 @@ delimiter ;
 
 
 delimiter $$
-create procedure process_ticket_response(in pTicketResponseID int)
+create procedure processTicketResponse(in pTicketResponseID int)
 begin
 	 declare EXIT handler for  SQLEXCEPTION
         BEGIN
@@ -175,7 +175,7 @@ delimiter ;
 
 
 delimiter $$
-create procedure add_scan_transaction(in pAmount decimal(7,2), in pUserId int, in pTerminalID int)
+create procedure addScanTransaction(in pAmount decimal(7,2), in pUserId int, in pTerminalID int)
 BEGIN
 	declare EXIT handler for  SQLEXCEPTION
         BEGIN
