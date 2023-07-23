@@ -115,13 +115,14 @@ delimiter ;
 
 
 delimiter $$
-create procedure processTicketResponse(in pTicketResponseID int)
+create procedure processTicketResponse(in pTicketResponseID int, out pResult boolean)
 begin
 	 declare EXIT handler for  SQLEXCEPTION
         BEGIN
 			ROLLBACK;
         
         END;
+	set pResult =false;
 	if pTicketResponseID in (select Id from TICKET_REQUEST_RESPONSE) 
     and (select Approved from TICKET_REQUEST_RESPONSE where Id=pTicketResponseID)=true
     then
@@ -152,10 +153,12 @@ begin
                                 LOCALTIME() + interval
                                 (select ValidFor from PERIODIC_TICKET where TICKET_TYPE_Id = @tempTicketTypeId ) day;
 								insert into USER_TICKETS values (@tempUserID,@tId,@tempValidUntil,null,@tempTicketTypeId);
+                                set pResult =true;
 						 elseif @tempTicketTypeId in (select TICKET_TYPE_Id from AMOUNT_TICKET) 
                          then 	
 								set @tempAmount = (select Amount from AMOUNT_TICKET where TICKET_TYPE_Id = @tempTicketTypeId );
 								insert into USER_TICKETS values (@tempUserID,@tId,null,@tempAmount,@tempTicketTypeId);
+                                set pResult =true;
 						 else 
 							ROLLBACK;
                          end if;
@@ -200,32 +203,8 @@ BEGIN
 END$$
 delimiter ;
 
-create view TICKETS_VIEW as
-select TICKET_TYPE_ID, Valid,TicketName, NeedsDocumentaion, Cost, inUse
-from (
-( select TICKET_TYPE_ID, TRANSPORTER_Id, ValidFor as Valid, Name as TicketName, NeedsDocumentaion, Cost, inUse
- from ACCEPTED a inner join (PERIODIC_TICKET pt inner join TICKET_TYPE tt1 on  pt.TICKET_TYPE_Id=tt1.Id)  using (TICKET_TYPE_Id)) 
-union
-(select TICKET_TYPE_ID, TRANSPORTER_Id, Amount as Valid, Name as TicketName, NeedsDocumentaion, Cost, inUse
- from ACCEPTED a2 inner join (AMOUNT_TICKET at inner join TICKET_TYPE tt2 on  at.TICKET_TYPE_Id=tt2.Id) using (TICKET_TYPE_Id)) ) as t1 
-;
-
-create view DRIVERS_VIEW as
-select PIN_USER.*, DRIVER.TRANSPORTER_Id from DRIVER INNER JOIN PIN_USER on (DRIVER.PIN_USER_Id = PIN_USER.Id);
-
-create view TICKET_CONTROLLERS_VIEW as
-select PIN_USER.* from TICKET_CONTROLLER INNER JOIN PIN_USER on (TICKET_CONTROLLER.PIN_USER_Id = PIN_USER.Id);
-
-create VIEW TICKET_REQUEST_VIEW as
-SELECT TICKET_REQUEST.Id, TICKET_REQUEST.DateTime , TICKET_REQUEST.USER_Id, TICKET_TYPE.Id as TicketID, 
-TICKET_TYPE.Name as TicketName , TICKET_TYPE.DocumentaionName
-FROM TICKET_REQUEST inner join TICKET_TYPE 
-on( TICKET_TYPE.Id = TICKET_REQUEST.TICKET_TYPE_Id) 
-where TICKET_REQUEST.Id not in (select TICKET_REQUEST_Id from TICKET_REQUEST_RESPONSE) and TICKET_TYPE.NeedsDocumentaion=true;
-
-
-
-
+call processTicketResponse(7,@pero);
+select @pero;
 ###AddUser AddSupervisor AddAdmin Activate Deactivate Admin Supervisor
 
 ###Pogledi
