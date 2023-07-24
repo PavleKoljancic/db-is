@@ -203,8 +203,6 @@ BEGIN
 END$$
 delimiter ;
 
-call processTicketResponse(7,@pero);
-select @pero;
 ###AddUser AddSupervisor AddAdmin Activate Deactivate Admin Supervisor
 
 ###Pogledi
