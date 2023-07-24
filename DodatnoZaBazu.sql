@@ -9,12 +9,9 @@ create INDEX SearchNameIndexROUTE on ROUTE (Name);
 
 create INDEX SearchIndexSupervisor on SUPERVISOR (Firstname,Lastname);
 
-alter table PIN_USER alter isActive set default  true;
+create INDEX TransactionDateTimeIndex on TRANSACTION (DateAndTime);
 
-ALTER TABLE USER MODIFY COLUMN PicturePath varchar(45) default null;
-ALTER TABLE USER MODIFY COLUMN DocumentPath1 varchar(50) default null;
-ALTER TABLE USER MODIFY COLUMN DocumentPath2 varchar(50) default null;
-ALTER TABLE USER MODIFY COLUMN DocumentPath3 varchar(50) default null;
+alter table PIN_USER alter isActive set default  true;
 
 
 

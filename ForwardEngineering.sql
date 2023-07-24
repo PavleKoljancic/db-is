@@ -4,7 +4,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
--- ------------------processTicketResponse-----------------------------------
+-- -----------------------------------------------------
 -- Schema eTicket
 -- -----------------------------------------------------
 
@@ -173,11 +173,11 @@ ENGINE = InnoDB;
 -- Table `eTicket`.`USER`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `eTicket`.`USER` (
-  `PicturePath` VARCHAR(100) NULL,
   `Id` INT NOT NULL AUTO_INCREMENT,
-  `DocumentPath1` VARCHAR(100) NULL,
-  `DocumentPath2` VARCHAR(100) NULL,
-  `DocumentPath3` VARCHAR(100) NULL,
+  `PictureHash` BINARY(64) NULL,
+  `DocumentName1` VARCHAR(100) NULL,
+  `DocumentName2` VARCHAR(100) NULL,
+  `DocumentName3` VARCHAR(100) NULL,
   `Email` VARCHAR(50) NOT NULL,
   `Firstname` VARCHAR(20) NOT NULL,
   `Lastname` VARCHAR(20) NOT NULL,
