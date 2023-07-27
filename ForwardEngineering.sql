@@ -143,7 +143,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `eTicket`.`ROUTE_HISTORY` (
   `FromDateTime` DATETIME NOT NULL,
-  `ToDateTime` DATE NULL,
+  `ToDateTime` TIMESTAMP NULL,
   `ROUTE_Id` INT NOT NULL,
   `TERMINAL_Id` INT NOT NULL,
   `DRIVER_PIN_USER_Id` INT NOT NULL,
@@ -174,9 +174,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `eTicket`.`USER` (
   `Id` INT NOT NULL AUTO_INCREMENT,
-  `PictureHash` BINARY(64) NULL,
-  `DocumentName1` VARCHAR(100) NULL,
-  `DocumentName2` VARCHAR(100) NULL,
+  `PictureHash` BINARY(64) NULL DEFAULT NULL,
+  `DocumentName1` VARCHAR(100) NULL DEFAULT NULL,
+  `DocumentName2` VARCHAR(100) NULL DEFAULT NULL,
   `DocumentName3` VARCHAR(100) NULL,
   `Email` VARCHAR(50) NOT NULL,
   `Firstname` VARCHAR(20) NOT NULL,
