@@ -175,7 +175,7 @@ delimiter ;
 
 
 delimiter $$
-create procedure addScanTransaction(in pAmount decimal(7,2), in pUserId int, in pTerminalID int)
+create procedure addScanTransaction(in pAmount decimal(7,2), in pUserId int, in pTerminalID int, out pResult boolean)
 BEGIN
 	declare EXIT handler for  SQLEXCEPTION
         BEGIN
@@ -184,6 +184,7 @@ BEGIN
     ROLLBACK;
         
         END;
+	set pResult=false;
 	if pUserId in ( select Id from USER) and pTerminalID in (select Id from TERMINAL)
     then
 	START TRANSACTION;
@@ -195,6 +196,7 @@ BEGIN
     update USER
     set Credit=Credit-pAmount
     where USER.Id = pUserId;
+    set pResult=true;
     COMMIT;
 	end if;
 END$$
